@@ -15,6 +15,10 @@ RUN go mod download
 # 拷贝应用代码到镜像中
 COPY . .
 
+# 若前端 dist 不存在，创建最小占位页面，避免镜像构建失败
+RUN mkdir -p dist && \
+    [ -f dist/index.html ] || echo '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Film Fusion</title></head><body><h1>Film Fusion</h1><p>前端资源未内置，请挂载完整 dist 目录。</p></body></html>' > dist/index.html
+
 # 编译应用
 RUN go build -o film-fusion
 
