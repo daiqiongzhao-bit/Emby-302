@@ -59,13 +59,25 @@ type FileWatcherConfig struct {
 }
 
 type EmbyConfig struct {
-	Enabled          bool   `mapstructure:"enabled"`             // 是否启用 EMBY 服务
-	URL              string `mapstructure:"url"`                 // EMBY 服务器地址
-	APIKey           string `mapstructure:"api_key"`             // EMBY API 密钥
-	AdminUserID      string `mapstructure:"admin_user_id"`       // EMBY 管理员用户 ID
-	CacheTime        int    `mapstructure:"cache_time"`          // API 请求超时时间（秒）
-	AddNextMediaInfo bool   `mapstructure:"add_next_media_info"` // 是否添加下一部媒体信息
-	RunProxyPort     int    `mapstructure:"run_proxy_port"`      // 运行 Emby 代理端口
+	Enabled          bool                 `mapstructure:"enabled"`              // 是否启用 EMBY 服务
+	URL              string               `mapstructure:"url"`                  // EMBY 服务器地址
+	APIKey           string               `mapstructure:"api_key"`              // EMBY API 密钥
+	AdminUserID      string               `mapstructure:"admin_user_id"`        // EMBY 管理员用户 ID
+	CacheTime        int                  `mapstructure:"cache_time"`           // API 请求超时时间（秒）
+	AddNextMediaInfo bool                 `mapstructure:"add_next_media_info"`  // 是否添加下一部媒体信息
+	RunProxyPort     int                  `mapstructure:"run_proxy_port"`       // 运行 Emby 代理端口
+	ExtDomains       EmbyExtDomainsConfig `mapstructure:"ext_domains"`          // Emby 扩展域名接口配置
+}
+
+type EmbyExtDomainsConfig struct {
+	Enabled                bool                    `mapstructure:"enabled"`                  // 是否启用扩展域名接口
+	ValidateTimeoutSeconds int                     `mapstructure:"validate_timeout_seconds"` // token 验证请求超时秒数
+	Domains                []EmbyExtDomainItem     `mapstructure:"domains"`                  // 返回给 Emby 的域名列表
+}
+
+type EmbyExtDomainItem struct {
+	Name string `mapstructure:"name"`
+	URL  string `mapstructure:"url"`
 }
 
 type MoviePilotConfig struct {
@@ -122,6 +134,10 @@ func setDefaults() {
 	viper.SetDefault("jwt.secret", "your-secret-key-change-in-production")
 	viper.SetDefault("jwt.expire_time", 24) // 24小时
 	viper.SetDefault("jwt.issuer", "film-fusion")
+
+	// Emby 扩展域名默认配置
+	viper.SetDefault("emby.ext_domains.enabled", false)
+	viper.SetDefault("emby.ext_domains.validate_timeout_seconds", 3)
 }
 
 // validateConfig 验证配置的有效性

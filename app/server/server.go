@@ -180,6 +180,10 @@ func (s *Server) setupRoutes() {
 	pickcodeCacheHandler := handler.NewPickcodeCacheHandler()
 	match302Handler := handler.NewMatch302Handler()
 	organizeHandler := handler.NewOrganizeHandler(s.Logger, s.moviePilotService, s.download115Service)
+	embyExtDomainsHandler := handler.NewEmbyExtDomainsHandler(s.Config)
+
+	// Emby 扩展域名接口（兼容第三方客户端）
+	s.gin.GET("/emby/System/Ext/ServerDomains", embyExtDomainsHandler.GetServerDomains)
 
 	// API路由组
 	api := s.gin.Group("/api")

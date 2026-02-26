@@ -6,6 +6,7 @@
 
 - 🎬 **STRM 文件管理** - 自动生成和管理 STRM 流媒体文件
 - 📺 **Emby 集成** - 完整的 Emby 服务器代理和直链播放支持
+- 🌍 **Emby 扩展域名** - 提供 `/emby/System/Ext/ServerDomains` 域名列表接口（Token 验证）
 - ☁️ **115网盘集成** - 支持 115网盘文件下载和直链播放
 - 📁 **文件监控** - 自动监控目录变化，支持复制、移动、硬链接
 - 🔗 **CloudDrive2 集成** - 无缝集成 CloudDrive2 文件监控
@@ -76,6 +77,22 @@ emby:
 1. 登录 Emby → 设置 → 高级 → API 密钥
 2. 创建新密钥，输入应用名称
 3. 复制生成的密钥到配置文件
+
+### Emby 扩展域名接口配置
+开启后可通过 `/emby/System/Ext/ServerDomains` 返回多线路域名列表（会先向 Emby 校验 Token）。
+
+```yaml
+emby:
+  url: "http://localhost:8096"
+  ext_domains:
+    enabled: true
+    validate_timeout_seconds: 3
+    domains:
+      - name: "主线路"
+        url: "https://line1.example.com"
+      - name: "备用线路"
+        url: "https://line2.example.com"
+```
 
 ## 🎯 使用指南
 
